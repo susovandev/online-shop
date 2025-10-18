@@ -112,6 +112,20 @@ class AuthController {
             next(error);
         }
     }
+
+    async me(req, res, next) {
+        try {
+            const { sub } = req.user;
+            const user = await userModel.findById(sub).select('-password');
+            if (!user) {
+                throw new ApiError(401, 'You are not authenticated user');
+            }
+            res.status(200).json(new ApiResponse(200, 'Success', user));
+        } catch (error) {
+            console.error(error);
+            next(error);
+        }
+    }
 }
 
 export const authController = new AuthController();

@@ -3,6 +3,7 @@ import { config } from '../config/env.config.js';
 import { signAccessToken } from '../utils/token.js';
 import { ApiResponse } from '../utils/apiResponse.js';
 import { ApiError } from '../utils/apiError.js';
+import { redisClient } from '../db/redis.js';
 class AuthController {
     async registerUser(req, res, next) {
         /**
@@ -113,7 +114,7 @@ class AuthController {
         }
     }
 
-    async me(req, res, next) {
+    async getCurrentUser(req, res, next) {
         try {
             const { sub } = req.user;
             const user = await userModel.findById(sub).select('-password');
@@ -121,6 +122,27 @@ class AuthController {
                 throw new ApiError(401, 'You are not authenticated user');
             }
             res.status(200).json(new ApiResponse(200, 'Success', user));
+        } catch (error) {
+            console.error(error);
+            next(error);
+        }
+    }
+
+    async logout(req, res, next) {
+        try {
+            const accessToken = req.cookies.accessToken;
+            if (!accessToken) {
+                throw new ApiError(401, 'You are not logged in');
+            }
+            await redisClient.set(
+                `logout:${accessToken}`,
+                'true',
+                'EX',
+                24 * 60 * 60
+            );
+            res.clearCookie('accessToken')
+                .status(200)
+                .json(new ApiResponse(200, 'Logged out successfully'));
         } catch (error) {
             console.error(error);
             next(error);

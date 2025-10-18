@@ -20,5 +20,6 @@ router
 router
     .route('/login')
     .post(loginUserValidationSchema(), validate, authController.loginUser);
-router.route('/me').get(authMiddleware, authController.me);
+router.route('/me').get(authMiddleware, authController.getCurrentUser);
+router.route('/logout').post(authController.logout);
 export default router;

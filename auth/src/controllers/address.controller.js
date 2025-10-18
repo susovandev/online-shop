@@ -3,6 +3,14 @@ import { ApiError } from '../utils/apiError.js';
 import { ApiResponse } from '../utils/apiResponse.js';
 
 class AddressController {
+    /**
+     * Get user id from the request user
+     * Find user in the database
+     * if(user exists) :
+     *    Send user addresses in the response
+     * else :
+     *    throw error
+     */
     async getUserAddresses(req, res, next) {
         try {
             const { sub } = req.user;
@@ -20,6 +28,15 @@ class AddressController {
     }
 
     async addUserAddress(req, res, next) {
+        /**
+         * Get user id from the request user
+         * Find user in the database
+         * if(user exists) :
+         *    Add address to the user
+         *    Send success response
+         * else :
+         *    throw error
+         */
         try {
             const { sub } = req.user;
             const { street, city, state, zip, country } = req.body;
@@ -39,6 +56,15 @@ class AddressController {
     }
 
     async deleteUserAddress(req, res, next) {
+        /**
+         * Get user id from the request user and address id from the request params
+         * Find user and address in the database
+         * if(user and address exists) :
+         *    Delete address from the user
+         *    Send success response
+         * else :
+         *    throw error
+         */
         try {
             const { sub } = req.user;
             const { addressId } = req.params;

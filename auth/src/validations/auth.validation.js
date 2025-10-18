@@ -41,6 +41,10 @@ const registerUserValidationSchema = () => [
         .trim()
         .isLength({ min: 3, max: 50 })
         .withMessage('Last name must be between 3 and 50 characters long'),
+    body('role')
+        .optional()
+        .isIn(['user', 'seller'])
+        .withMessage('Role must be user or seller'),
 ];
 
 const loginUserValidationSchema = () => [

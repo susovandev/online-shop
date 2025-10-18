@@ -22,6 +22,7 @@ class AuthController {
                 email,
                 password,
                 fullName: { firstName, lastName },
+                role,
             } = req.body;
 
             const isUserAlreadyExists = await userModel.findOne({
@@ -40,6 +41,7 @@ class AuthController {
                     firstName,
                     lastName,
                 },
+                rol: role || 'user',
             });
 
             const accessToken = signAccessToken(newUser);
@@ -115,6 +117,14 @@ class AuthController {
     }
 
     async getCurrentUser(req, res, next) {
+        /**
+         * Get user id from the request user
+         * Find user in the database
+         * if(user exists) :
+         *    Send user in the response
+         * else :
+         *    throw error
+         */
         try {
             const { sub } = req.user;
             const user = await userModel.findById(sub).select('-password');
@@ -129,6 +139,12 @@ class AuthController {
     }
 
     async logout(req, res, next) {
+        /**
+         * Get access token from the request cookies
+         * if(access token exists) :
+         *    Blacklist access token from the redis
+         *    Send response
+         */
         try {
             const accessToken = req.cookies.accessToken;
             if (!accessToken) {

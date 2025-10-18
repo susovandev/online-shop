@@ -1,6 +1,9 @@
 import { Router } from 'express';
 
-import { registerUserValidationSchema } from '../validations/auth.validation.js';
+import {
+    registerUserValidationSchema,
+    loginUserValidationSchema,
+} from '../validations/auth.validation.js';
 import { validate } from '../middleware/validation.middleware.js';
 import { authController } from '../controllers/auth.controller.js';
 
@@ -13,5 +16,7 @@ router
         validate,
         authController.registerUser
     );
-
+router
+    .route('/login')
+    .post(loginUserValidationSchema(), validate, authController.loginUser);
 export default router;

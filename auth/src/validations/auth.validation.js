@@ -62,4 +62,50 @@ const loginUserValidationSchema = () => [
         .withMessage('Password must be at least 6 characters long'),
 ];
 
-export { registerUserValidationSchema, loginUserValidationSchema };
+const userAddressValidationSchema = () => [
+    body('street')
+        .notEmpty()
+        .withMessage('Street is required')
+        .isString()
+        .withMessage('Street must be a string')
+        .trim()
+        .isLength({ min: 3, max: 50 })
+        .withMessage('Street must be between 3 and 50 characters long'),
+    body('city')
+        .notEmpty()
+        .withMessage('City is required')
+        .isString()
+        .withMessage('City must be a string')
+        .trim()
+        .isLength({ min: 3, max: 50 })
+        .withMessage('City must be between 3 and 50 characters long'),
+    body('state')
+        .notEmpty()
+        .withMessage('State is required')
+        .isString()
+        .withMessage('State must be a string')
+        .trim()
+        .isLength({ min: 3, max: 50 })
+        .withMessage('State must be between 3 and 50 characters long'),
+    body('zip')
+        .notEmpty()
+        .withMessage('Zip is required')
+        .isString()
+        .withMessage('Zip must be a string')
+        .trim()
+        .isLength({ min: 3, max: 50 })
+        .withMessage('Zip must be between 3 and 50 characters long'),
+    body('country')
+        .notEmpty()
+        .withMessage('Country is required')
+        .isString()
+        .withMessage('Country must be a string')
+        .trim()
+        .isLength({ min: 3, max: 50 })
+        .withMessage('Country must be between 3 and 50 characters long'),
+];
+export {
+    registerUserValidationSchema,
+    loginUserValidationSchema,
+    userAddressValidationSchema,
+};

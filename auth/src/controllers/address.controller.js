@@ -18,6 +18,24 @@ class AddressController {
             next(error);
         }
     }
+
+    async addUserAddress(req, res, next) {
+        try {
+            const { sub } = req.user;
+            const { street, city, state, zip, country } = req.body;
+
+            await userModel.findOneAndUpdate(
+                { _id: sub },
+                { $push: { addresses: { street, city, state, zip, country } } }
+            );
+            res.status(200).json(
+                new ApiResponse(200, 'Address added successfully')
+            );
+        } catch (error) {
+            console.error(error);
+            next(error);
+        }
+    }
 }
 
 export const addressController = new AddressController();

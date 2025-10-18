@@ -3,6 +3,7 @@ import { Router } from 'express';
 import {
     registerUserValidationSchema,
     loginUserValidationSchema,
+    userAddressValidationSchema,
 } from '../validations/auth.validation.js';
 import { validate } from '../middleware/validation.middleware.js';
 import { authController } from '../controllers/auth.controller.js';
@@ -27,6 +28,13 @@ router.route('/logout').post(authController.logout);
 // Address Routes
 router
     .route('/users/me/address')
+    .post(
+        userAddressValidationSchema(),
+        validate,
+        authMiddleware,
+        authMiddleware,
+        addressController.addUserAddress
+    )
     .get(authMiddleware, addressController.getUserAddresses);
 
 export default router;

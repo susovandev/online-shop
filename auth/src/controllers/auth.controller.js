@@ -41,10 +41,24 @@ class AuthController {
                     firstName,
                     lastName,
                 },
-                rol: role || 'user',
+                role: role || 'user',
             });
 
+            if (!newUser) {
+                throw new ApiError(
+                    500,
+                    'Something went wrong while creating a user'
+                );
+            }
+
             const accessToken = signAccessToken(newUser);
+
+            if (!accessToken) {
+                throw new ApiError(
+                    500,
+                    'Something went wrong while generating access token'
+                );
+            }
 
             res.cookie('accessToken', accessToken, {
                 httpOnly: true,
@@ -94,6 +108,12 @@ class AuthController {
             }
 
             const accessToken = signAccessToken(isUserAlreadyExits);
+            if (!accessToken) {
+                throw new ApiError(
+                    500,
+                    'Something went wrong while generating access token'
+                );
+            }
 
             res.cookie('accessToken', accessToken, {
                 httpOnly: true,

@@ -1,0 +1,38 @@
+import multer from 'multer';
+import { v4 as uuid } from 'uuid';
+import fs from 'node:fs';
+
+const uploadDir = 'public/uploads/';
+
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, uploadDir);
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = 'online-shop' + '-' + uuid();
+        console.log('file', uniqueSuffix);
+        cb(null, uniqueSuffix + '-' + file.originalname);
+    },
+});
+
+const fileFilter = (req, file, cb) => {
+    const allowedMimeTypes = ['image/jpeg', 'image/png', 'video/mp4'];
+
+    if (allowedMimeTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Invalid file type'), false);
+    }
+};
+
+const upload = multer({
+    storage: storage,
+    fileFilter,
+    limits: { fileSize: 1024 * 1024 * 100 },
+});
+
+export { upload };

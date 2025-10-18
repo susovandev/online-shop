@@ -22,8 +22,9 @@ router
 router
     .route('/login')
     .post(loginUserValidationSchema(), validate, authController.loginUser);
-router.route('/me').get(authMiddleware, authController.getCurrentUser);
 router.route('/logout').post(authController.logout);
+
+router.route('/users/me').get(authMiddleware, authController.getCurrentUser);
 
 // Address Routes
 router
@@ -36,5 +37,8 @@ router
         addressController.addUserAddress
     )
     .get(authMiddleware, addressController.getUserAddresses);
+router
+    .route('/users/me/address/:addressId')
+    .delete(authMiddleware, addressController.deleteUserAddress);
 
 export default router;

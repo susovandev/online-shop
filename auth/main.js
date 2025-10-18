@@ -12,7 +12,7 @@ connectDB()
             console.log(`Server running on ${PROTOCOL}://${HOST}:${PORT}`);
         });
     })
-    .catch(error =>
+    .catch((error) =>
         console.error(
             `Database connection error while starting server: ${error}`
         )

@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
-import { addressSchema } from './address.model';
+import { addressSchema } from './address.model.js';
+import bcrypt from 'bcryptjs';
 
 const userSchema = new Schema(
     {
@@ -20,6 +21,7 @@ const userSchema = new Schema(
             required: [true, 'Password is required'],
             trim: true,
             minLength: [6, 'Password must be at least 6 characters long'],
+            select: false,
         },
         fullName: {
             firstName: {
@@ -41,4 +43,10 @@ const userSchema = new Schema(
     { timestamps: true }
 );
 
+userSchema.pre('save', async function (next) {
+    if (this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password, 10);
+    }
+    next();
+});
 export const User = model('User', userSchema);

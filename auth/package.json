@@ -4,7 +4,7 @@
     "description": "",
     "main": "main.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "test",
         "dev": "npx nodemon main.js",
         "start": "node main.js",
         "format": "prettier --write .",
@@ -20,6 +20,7 @@
     "dependencies": {
         "dotenv": "^17.2.3",
         "express": "^5.1.0",
+        "express-validator": "^7.2.1",
         "mongoose": "^8.19.1"
     }
 }

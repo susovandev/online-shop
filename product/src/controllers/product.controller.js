@@ -177,6 +177,27 @@ class ProductController {
             next(error);
         }
     }
+
+    async getSellerProducts(req, res, next) {
+        try {
+            const { sub } = req.user;
+            const { skip = 0, limit = 20 } = req.query;
+
+            const products = await productModel
+                .find({ seller: sub })
+                .skip(skip)
+                .limit(Math.min(limit, 20));
+            if (!products) {
+                throw new ApiError(404, 'Products not found');
+            }
+            res.status(200).json(
+                new ApiResponse(200, 'Products fetched successfully', products)
+            );
+        } catch (error) {
+            console.error(error);
+            next(error);
+        }
+    }
 }
 
 export const productController = new ProductController();

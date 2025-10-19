@@ -22,6 +22,10 @@ router
 
 router.route('/').get(productController.getAllProducts);
 
+router
+    .route('/seller')
+    .get(createAuthMiddleware(['seller']), productController.getSellerProducts);
+
 router.route('/:id').get(productController.getProductById);
 router
     .route('/:id')

@@ -31,4 +31,10 @@ router
         createAuthMiddleware(['seller']),
         productController.updateProduct
     );
+router
+    .route('/:id')
+    .delete(
+        createAuthMiddleware(['seller']),
+        productController.deleteProductById
+    );
 export default router;

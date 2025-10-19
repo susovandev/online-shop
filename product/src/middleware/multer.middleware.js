@@ -13,8 +13,15 @@ const storage = multer.diskStorage({
         cb(null, uploadDir);
     },
     filename: function (req, file, cb) {
-        const uniqueSuffix = 'online-shop' + '-' + uuid();
-        console.log('file', uniqueSuffix);
+        const uniqueSuffix =
+            'online-shop' +
+            '-' +
+            uuid() +
+            '-' +
+            Date.now() +
+            '-' +
+            'susovan-das';
+        console.log(uniqueSuffix);
         cb(null, uniqueSuffix + '-' + file.originalname);
     },
 });

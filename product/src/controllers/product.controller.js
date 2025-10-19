@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { Product as productModel } from '../models/product.model.js';
 import { ApiError } from '../utils/apiError.js';
 import { ApiResponse } from '../utils/apiResponse.js';
@@ -70,6 +71,29 @@ class ProductController {
             );
         } catch (error) {
             console.log(error);
+            next(error);
+        }
+    }
+
+    async getProductById(req, res, next) {
+        try {
+            const { id } = req.params;
+
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                throw new ApiError(400, 'Invalid product ID');
+            }
+
+            const product = await productModel.findById(id);
+
+            if (!product) {
+                throw new ApiError(404, 'Product not found');
+            }
+
+            res.status(200).json(
+                new ApiResponse(200, 'Product fetched successfully', product)
+            );
+        } catch (error) {
+            console.error(error);
             next(error);
         }
     }

@@ -19,4 +19,5 @@ router
 
 router.route('/').get(productController.getAllProducts);
 
+router.route('/:id').get(productController.getProductById);
 export default router;

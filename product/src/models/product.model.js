@@ -36,4 +36,6 @@ const productSchema = new Schema(
     { timestamps: true }
 );
 
+productSchema.index({ title: 1, description: 1 });
+
 export const Product = model('Product', productSchema);

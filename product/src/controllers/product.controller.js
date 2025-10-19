@@ -41,6 +41,38 @@ class ProductController {
             next(error);
         }
     }
+
+    async getAllProducts(req, res, next) {
+        try {
+            const { q, minPrice, maxPrice, skip = 0, limit = 20 } = req.query;
+
+            const filter = {};
+
+            if (q) {
+                filter.title = { $regex: q, $options: 'i' };
+            }
+
+            if (minPrice) {
+                filter['price.amount'] = { $gte: Number(minPrice) };
+            }
+
+            if (maxPrice) {
+                filter['price.amount'] = { $lte: Number(maxPrice) };
+            }
+
+            const products = await productModel
+                .find(filter)
+                .skip(skip)
+                .limit(limit);
+
+            res.status(200).json(
+                new ApiResponse(200, 'Products fetched successfully', products)
+            );
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    }
 }
 
 export const productController = new ProductController();

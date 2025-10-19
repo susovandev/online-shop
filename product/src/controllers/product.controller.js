@@ -97,6 +97,40 @@ class ProductController {
             next(error);
         }
     }
+
+    async updateProduct(req, res, next) {
+        try {
+            const { id } = req.params;
+            const { sub } = req.user;
+            const { title, description, amount } = req.body;
+
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                throw new ApiError(400, 'Invalid product ID');
+            }
+
+            const product = await productModel.findOne({
+                _id: id,
+                seller: sub,
+            });
+
+            if (!product) {
+                throw new ApiError(404, 'Product not found');
+            }
+
+            if (title) product.title = title;
+            if (description) product.description = description;
+            if (amount) product.price.amount = amount;
+
+            await product.save({ validateBeforeSave: false });
+
+            res.status(200).json(
+                new ApiResponse(200, 'Product updated successfully', product)
+            );
+        } catch (error) {
+            console.error(error);
+            next(error);
+        }
+    }
 }
 
 export const productController = new ProductController();

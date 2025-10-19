@@ -1,7 +1,10 @@
 import { Router } from 'express';
 import { productController } from '../controllers/product.controller.js';
 import { createAuthMiddleware } from '../middleware/auth.middleware.js';
-import { createProductValidationSchema } from '../validations/product.validation.js';
+import {
+    createProductValidationSchema,
+    updateProductValidationSchema,
+} from '../validations/product.validation.js';
 import { validate } from '../middleware/validation.middleware.js';
 import { upload } from '../middleware/multer.middleware.js';
 
@@ -20,4 +23,12 @@ router
 router.route('/').get(productController.getAllProducts);
 
 router.route('/:id').get(productController.getProductById);
+router
+    .route('/:id')
+    .patch(
+        updateProductValidationSchema(),
+        validate,
+        createAuthMiddleware(['seller']),
+        productController.updateProduct
+    );
 export default router;
